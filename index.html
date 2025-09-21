@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Flor Amarilla 🌼</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    canvas { background: black; }
+    #mensaje {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    #dedicatoria {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="mensaje">Para la niña perfecta ante mis ojos</div>
+  <div id="dedicatoria">Con cariño, Smith</div>
+  <canvas id="canvas"></canvas>
 
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function drawFlower(cx, cy) {
+      ctx.strokeStyle = "yellow";
+      for (let i = 0; i < 16; i++) {
+        for (let j = 0; j < 18; j++) {
+          ctx.beginPath();
+          ctx.arc(cx, cy, 150 - j * 6, 0, Math.PI / 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(cx, cy, 150 - j * 6, Math.PI / 2, Math.PI);
+          ctx.stroke();
+        }
+        ctx.rotate((Math.PI * 2) / 16);
+      }
+
+      // centro de la flor
+      ctx.fillStyle = "brown";
+      const phi = 137.508 * (Math.PI / 180);
+      for (let i = 0; i < 200; i++) {
+        let r = 4 * Math.sqrt(i);
+        let theta = i * phi;
+        let x = cx + r * Math.cos(theta);
+        let y = cy + r * Math.sin(theta);
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    function drawStem(x, y) {
+      ctx.strokeStyle = "green";
+      ctx.lineWidth = 12;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x, y + 200);
+      ctx.stroke();
+
+      // hoja
+      ctx.fillStyle = "green";
+      ctx.beginPath();
+      ctx.ellipse(x - 60, y + 150, 50, 20, Math.PI / 4, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function drawStars(amount) {
+      for (let i = 0; i < amount; i++) {
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        for (let j = 0; j < 5; j++) {
+          ctx.lineTo(
+            x + 10 * Math.cos((18 + j * 72) * Math.PI / 180),
+            y - 10 * Math.sin((18 + j * 72) * Math.PI / 180)
+          );
+          ctx.lineTo(
+            x + 4 * Math.cos((54 + j * 72) * Math.PI / 180),
+            y - 4 * Math.sin((54 + j * 72) * Math.PI / 180)
+          );
+        }
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    // MAIN
+    drawStem(canvas.width/2, canvas.height/2);
+    drawFlower(canvas.width/2, canvas.height/2 - 100);
+    drawStars(100);
+  </script>
+</body>
+</html>
